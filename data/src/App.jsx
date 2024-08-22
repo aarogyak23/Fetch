@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function App() {
   const [users, setUsers] = useState([]);
   const [postedUser, setPostedUser] = useState({});
 
   const fetchUsers = () => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(data => {
-        // debugger
-        setUsers(data)
+    axios.get('https://jsonplaceholder.typicode.com/users')
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
       });
   };
 
   const submitUser = () => {
-    fetch('https://jsonplaceholder.typicode.com/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Jane Doe', email: 'jane.doe@example.com' }),
+    axios.post('https://jsonplaceholder.typicode.com/users', {
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      address: '123 Main St',   
+      phone: '555-555-5555',    
     })
-      .then(response => response.json())
-      .then(data => setPostedUser(data));
+      .then(response => {
+        setPostedUser(response.data);
+      })
+      .catch(error => {
+        console.error('Error submitting user:', error);
+      });
   };
 
   return (
@@ -31,11 +38,11 @@ function App() {
 
       {users.length > 0 && (
         <div>
-          <h2>The Users are:</h2>
+          <h2>Fetched Users:</h2>
           <ul>
             {users.map(user => (
               <li key={user.id}>
-                <strong>{user.name}</strong> - {user.email} - {user.phone}
+                <strong>{user.name}</strong> - {user.email}
               </li>
             ))}
           </ul>
@@ -48,6 +55,8 @@ function App() {
           <p>ID: {postedUser.id}</p>
           <p>Name: {postedUser.name}</p>
           <p>Email: {postedUser.email}</p>
+          <p>Address: {postedUser.address}</p> 
+          <p>Phone: {postedUser.phone}</p>
         </div>
       )}
     </div>
@@ -56,15 +65,14 @@ function App() {
 
 export default App;
 
+let promise = new Promise(function (resolve,reject){
+  alert("Hello User!!!!")
+  resolve(67)
+})
+console.log("hello one")
+setTimeout(function(){
+  console.log("Hello again")
+},3000)
 
-// let promise = new Promise(function (resolve,reject){
-//   alert("Hello User!!!!")
-//   resolve(67)
-// })
-// console.log("hello one")
-// setTimeout(function(){
-//   console.log("Hello again")
-// },3000)
-
-// console.log("hello third")
-// console.log(promise)
+console.log("hello third")
+console.log(promise)
